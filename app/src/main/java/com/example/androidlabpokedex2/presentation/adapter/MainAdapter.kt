@@ -15,7 +15,7 @@ import java.lang.Exception
 
 private const val ITEM_TYPE_UNKNOWN = 0
 private const val ITEM_TYPE_POKEMON = 1
-private const val ITEM_TYPE_BANNER = 2
+private const val ITEM_TYPE_HEADER = 2
 class MainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: MutableList<DisplayableItem> = emptyList<DisplayableItem>().toMutableList()
 
@@ -33,10 +33,10 @@ class MainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 PokemonViewHolder(view)
             }
 
-            ITEM_TYPE_BANNER -> {
+            ITEM_TYPE_HEADER -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.banner_item, parent, false)
-                BannerViewHolder(view)
+                    .inflate(R.layout.header_item, parent, false)
+                HeaderViewHolder(view)
             }
             else -> {
                 throw IllegalStateException()
@@ -51,8 +51,8 @@ class MainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is PokemonItem -> {
                 (holder as PokemonViewHolder).bind(itemToShow)
             }
-            is BannerItem -> {
-                (holder as BannerViewHolder).bind(itemToShow)
+            is HeaderItem -> {
+                (holder as HeaderViewHolder).bind(itemToShow)
             }
         }
     }
@@ -60,7 +60,7 @@ class MainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemViewType(position: Int): Int {
         return when(items[position]) {
             is PokemonItem -> ITEM_TYPE_POKEMON
-            is BannerItem -> ITEM_TYPE_BANNER
+            is HeaderItem -> ITEM_TYPE_HEADER
             else -> ITEM_TYPE_UNKNOWN
         }
     }
@@ -92,11 +92,11 @@ class MainAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    class BannerViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val bannerName = itemView.findViewById<TextView>(R.id.bannerName)
+    class HeaderViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        private val bannerName = itemView.findViewById<TextView>(R.id.headerText)
 
-        fun bind(item: BannerItem) {
-            bannerName.text = item.bannerText
+        fun bind(item: HeaderItem) {
+            bannerName.text = item.text
         }
     }
 }

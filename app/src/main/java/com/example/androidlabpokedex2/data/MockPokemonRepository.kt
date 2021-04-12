@@ -7,8 +7,8 @@ class MockPokemonRepository: PokemonRepository {
     val items = mutableListOf<PokemonEntity>(
         PokemonEntity("1", "bulbasaur", generateUrlFromId(1)),
         PokemonEntity("2", "ivysaur", generateUrlFromId(2)),
-        PokemonEntity("3", "venusaur", generateUrlFromId(3)),
-        PokemonEntity("4", "charmander", generateUrlFromId(4)),
+        PokemonEntity("3", "venusaur", generateUrlFromId(3), 1),
+        PokemonEntity("4", "charmander", generateUrlFromId(4),1),
         PokemonEntity("5", "charmeleon", generateUrlFromId(5)),
     )
 

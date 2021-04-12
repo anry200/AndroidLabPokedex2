@@ -9,6 +9,6 @@ data class PokemonItem(
     val useRedColor: Boolean = false,
 ): DisplayableItem
 
-data class BannerItem(
-    val bannerText: String
+data class HeaderItem(
+    val text: String
 ): DisplayableItem

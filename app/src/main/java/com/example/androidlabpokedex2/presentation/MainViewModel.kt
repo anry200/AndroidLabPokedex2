@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.androidlabpokedex2.data.MockPokemonRepository
 import com.example.androidlabpokedex2.domain.PokemonEntity
 import com.example.androidlabpokedex2.domain.PokemonRepository
-import com.example.androidlabpokedex2.presentation.adapter.BannerItem
+import com.example.androidlabpokedex2.presentation.adapter.HeaderItem
 import com.example.androidlabpokedex2.presentation.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.adapter.PokemonItem
 
@@ -19,17 +19,20 @@ class MainViewModel: ViewModel() {
     fun loadData() {
         val pokemons = repository.getPokemonList()
 
-        val pokemonItemList = pokemons.mapIndexed { index, pokemon ->
-            val userColor = index % 4 == 0
-            PokemonItem(pokemon.id, pokemon.name, pokemon.previewUrl, userColor)
-        }
-
-        val banner = BannerItem("Banner")
+        val generation0 = pokemons.filter { it.generation == 0 }
+            .map { it.toItem() }
+        val generation1 = pokemons.filter { it.generation == 1 }
+            .map { it.toItem() }
 
         val newList = mutableListOf<DisplayableItem>()
-        newList.add(banner)
-        newList.addAll(pokemonItemList)
+        newList.add(HeaderItem("Generation 0"))
+        newList.addAll(generation0)
+        newList.add(HeaderItem("Generation 1"))
+        newList.addAll(generation1)
 
         _pokemonListLiveData.value = newList
     }
+
+    private fun PokemonEntity.toItem(): PokemonItem =
+        PokemonItem(id, name, previewUrl)
 }

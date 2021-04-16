@@ -1,5 +1,6 @@
 package com.example.androidlabpokedex2.data
 
+import com.example.androidlabpokedex2.domain.RepositoryCallback
 import com.example.androidlabpokedex2.domain.PokemonRepository
 import com.example.androidlabpokedex2.domain.PokemonEntity
 
@@ -12,11 +13,19 @@ class MockPokemonRepository: PokemonRepository {
         PokemonEntity("5", "charmeleon", generateUrlFromId(5)),
     )
 
-    override fun getPokemonList(): List<PokemonEntity> = items
-
-    override fun addNewPokemon(pokemon: PokemonEntity) {
-        items.add(pokemon)
+    override fun getPokemonList(callback: RepositoryCallback<List<PokemonEntity>>) {
+        callback.onSuccess(items)
     }
 
-    private fun generateUrlFromId(id: Int): String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
+    override fun getPokemonById(id: String, callback: RepositoryCallback<PokemonEntity>) {
+        val pokemon = items.find { it.id == id }
+
+        if (pokemon != null) {
+            callback.onSuccess(pokemon)
+        } else {
+            callback.onError("Not found")
+        }
+    }
+
+    fun generateUrlFromId(id: Int): String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
 }

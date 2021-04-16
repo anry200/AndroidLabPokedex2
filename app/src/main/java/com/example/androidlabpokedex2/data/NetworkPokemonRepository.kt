@@ -22,6 +22,10 @@ class NetworkPokemonRepository(
                 if (response.isSuccessful && pokemonListResponse != null) {
                     val pokemonList = pokemonListResponse.results.map {
 
+
+                        //
+
+
                         PokemonEntity(it.name, it.name, generateUrlFromId(it.name))
                     }
                     callback.onSuccess(pokemonList)

@@ -1,8 +1,8 @@
 package com.example.androidlabpokedex2.data
 
-import com.example.androidlabpokedex2.domain.RepositoryCallback
 import com.example.androidlabpokedex2.domain.PokemonRepository
 import com.example.androidlabpokedex2.domain.PokemonEntity
+import io.reactivex.Single
 
 class MockPokemonRepository: PokemonRepository {
     val items = mutableListOf<PokemonEntity>(
@@ -13,17 +13,16 @@ class MockPokemonRepository: PokemonRepository {
         PokemonEntity("5", "charmeleon", generateUrlFromId(5)),
     )
 
-    override fun getPokemonList(callback: RepositoryCallback<List<PokemonEntity>>) {
-        callback.onSuccess(items)
-    }
+    override fun getPokemonList(): Single<List<PokemonEntity>> =
+        Single.just(items)
 
-    override fun getPokemonById(id: String, callback: RepositoryCallback<PokemonEntity>) {
+    override fun getPokemonById(id: String): Single<PokemonEntity> {
         val pokemon = items.find { it.id == id }
 
-        if (pokemon != null) {
-            callback.onSuccess(pokemon)
+        return if (pokemon != null) {
+            Single.just(pokemon)
         } else {
-            callback.onError("Not found")
+            Single.error(Throwable("Not found"))
         }
     }
 

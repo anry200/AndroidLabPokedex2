@@ -10,8 +10,8 @@ import com.example.androidlabpokedex2.R
 import com.example.androidlabpokedex2.presentation.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.adapter.MainAdapter
 
-class MainActivity : AppCompatActivity(), MainView {
-    private val presenter = MainPresenter()
+class MainActivity : AppCompatActivity() {
+    private val viewModel = MainViwModel()
     private val adapter = MainAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,8 +19,21 @@ class MainActivity : AppCompatActivity(), MainView {
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-        presenter.attachView(this)
-        presenter.loadData()
+
+
+        viewModel.getPokemonList().observe(this){
+            showData(it)
+        }
+
+        viewModel.error().observe(this) {
+            showError(it)
+        }
+
+        viewModel.loading().observe(this) {
+            showProgress()
+        }
+
+        viewModel.loadData()
     }
 
     private fun initRecyclerView() {
@@ -29,20 +42,15 @@ class MainActivity : AppCompatActivity(), MainView {
         recyclerView.adapter = adapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.detachView()
-    }
-
-    override fun showProgress() {
+    private fun showProgress() {
         Toast.makeText(this, "Loading", Toast.LENGTH_LONG).show()
     }
 
-    override fun showData(items: List<DisplayableItem>) {
+    private fun showData(items: List<DisplayableItem>) {
         adapter.setPokemonList(items)
     }
 
-    override fun showError(errorMessage: String) {
+    private fun showError(errorMessage: String) {
 
     }
 }

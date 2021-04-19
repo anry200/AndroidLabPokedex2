@@ -2,7 +2,6 @@ package com.example.androidlabpokedex2.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log.d
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,7 @@ import com.example.androidlabpokedex2.presentation.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.adapter.MainAdapter
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel = MainViwModel()
+    private val viewModel = MainViewModel()
     private val adapter = MainAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,17 +19,18 @@ class MainActivity : AppCompatActivity() {
 
         initRecyclerView()
 
-
-        viewModel.getPokemonList().observe(this){
-            showData(it)
-        }
-
-        viewModel.error().observe(this) {
-            showError(it)
-        }
-
-        viewModel.loading().observe(this) {
-            showProgress()
+        viewModel.viewState().observe(this) { state ->
+            when(state) {
+                is MainViewState.LoadingState -> {
+                    showProgress()
+                }
+                is MainViewState.ErrorState -> {
+                    showError(state.errorMessage)
+                }
+                is MainViewState.ContentState -> {
+                    showData(state.items)
+                }
+            }
         }
 
         viewModel.loadData()

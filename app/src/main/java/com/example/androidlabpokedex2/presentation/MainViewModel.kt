@@ -7,13 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.example.androidlabpokedex2.data.NetworkPokemonRepository
 import com.example.androidlabpokedex2.data.network.createPokedexApiService
 import com.example.androidlabpokedex2.domain.PokemonRepository
-import com.example.androidlabpokedex2.presentation.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.adapter.toItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class MainViwModel: ViewModel() {
+class MainViewModel: ViewModel() {
 
     private val repository: PokemonRepository = NetworkPokemonRepository(
         api = createPokedexApiService()
@@ -21,17 +20,11 @@ class MainViwModel: ViewModel() {
 
     private var disposable: Disposable? = null
 
-    private val _pokemonListLiveData = MutableLiveData<List<DisplayableItem>>()
-    fun getPokemonList(): LiveData<List<DisplayableItem>> = _pokemonListLiveData
-
-    private val _loadingLiveData = MutableLiveData<Boolean>()
-    fun loading(): LiveData<Boolean> = _loadingLiveData
-
-    private val _errorLiveData = MutableLiveData<String>()
-    fun error(): LiveData<String> = _errorLiveData
+    private val viewStateLiveData = MutableLiveData<MainViewState>()
+    fun viewState(): LiveData<MainViewState> = viewStateLiveData
 
     fun loadData() {
-        _loadingLiveData.value = true
+        viewStateLiveData.value = MainViewState.LoadingState
 
         disposable = repository.getPokemonList()
             .map { items -> items.map { it.toItem() } }
@@ -39,10 +32,10 @@ class MainViwModel: ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    _pokemonListLiveData.postValue(it)
+                    viewStateLiveData.value = MainViewState.ContentState(it)
                 }, {
                     Log.d("ViewModel", "Error is", it)
-                    _errorLiveData.postValue("Error")
+                    viewStateLiveData.value = MainViewState.ErrorState("Error Message")
                 }
             )
     }

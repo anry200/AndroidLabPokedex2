@@ -1,11 +1,13 @@
 package com.example.androidlabpokedex2.presentation.list
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
+import com.example.androidlabpokedex2.presentation.details.PokemonDetailsActivity
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.list.adapter.MainAdapter
 
@@ -40,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         adapter = MainAdapter(
             onItemClicked = { id ->
                 Toast.makeText(this, "Pokemon selected with id=$id", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, PokemonDetailsActivity::class.java)
+                intent.putExtra("Pockemon_Id", id)
+                startActivity(intent)
             }
         )
 

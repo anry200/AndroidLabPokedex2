@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
+import com.example.androidlabpokedex2.presentation.details.PARAM_POKEMON_ID
 import com.example.androidlabpokedex2.presentation.details.PokemonDetailsActivity
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.list.adapter.MainAdapter
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Pokemon selected with id=$id", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(this, PokemonDetailsActivity::class.java)
-                intent.putExtra("Pockemon_Id", id)
+                intent.putExtra(PARAM_POKEMON_ID, id)
                 startActivity(intent)
             }
         )

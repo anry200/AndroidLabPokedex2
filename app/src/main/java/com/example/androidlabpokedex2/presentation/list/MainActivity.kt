@@ -1,4 +1,4 @@
-package com.example.androidlabpokedex2.presentation
+package com.example.androidlabpokedex2.presentation.list
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,12 +6,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
-import com.example.androidlabpokedex2.presentation.adapter.DisplayableItem
-import com.example.androidlabpokedex2.presentation.adapter.MainAdapter
+import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
+import com.example.androidlabpokedex2.presentation.list.adapter.MainAdapter
 
 class MainActivity : AppCompatActivity() {
     private val viewModel = MainViewModel()
-    private val adapter = MainAdapter()
+    private var adapter: MainAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
+        adapter = MainAdapter(
+            onItemClicked = { id ->
+                Toast.makeText(this, "Pokemon selected with id=$id", Toast.LENGTH_SHORT).show()
+            }
+        )
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -47,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showData(items: List<DisplayableItem>) {
-        adapter.setPokemonList(items)
+        adapter?.setPokemonList(items)
     }
 
     private fun showError(errorMessage: String) {

@@ -1,4 +1,4 @@
-package com.example.androidlabpokedex2.presentation.adapter
+package com.example.androidlabpokedex2.presentation.list.adapter
 
 import com.example.androidlabpokedex2.domain.PokemonEntity
 

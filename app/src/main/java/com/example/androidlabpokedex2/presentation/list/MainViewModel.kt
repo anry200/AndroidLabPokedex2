@@ -1,4 +1,4 @@
-package com.example.androidlabpokedex2.presentation
+package com.example.androidlabpokedex2.presentation.list
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.androidlabpokedex2.data.NetworkPokemonRepository
 import com.example.androidlabpokedex2.data.network.createPokedexApiService
 import com.example.androidlabpokedex2.domain.PokemonRepository
-import com.example.androidlabpokedex2.presentation.adapter.toItem
+import com.example.androidlabpokedex2.presentation.list.adapter.toItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

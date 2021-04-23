@@ -10,16 +10,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class MainViewModel: ViewModel() {
+class PokemonListViewModel: ViewModel() {
     private val repository = Injector.providePokemonRepository()
 
     private var disposable: Disposable? = null
 
-    private val viewStateLiveData = MutableLiveData<MainViewState>()
-    fun viewState(): LiveData<MainViewState> = viewStateLiveData
+    private val viewStateLiveData = MutableLiveData<PokemonListViewState>()
+    fun viewState(): LiveData<PokemonListViewState> = viewStateLiveData
 
     fun loadData() {
-        viewStateLiveData.value = MainViewState.LoadingState
+        viewStateLiveData.value = PokemonListViewState.LoadingState
 
         disposable = repository.getPokemonList()
             .map { items -> items.map { it.toItem() } }
@@ -27,10 +27,10 @@ class MainViewModel: ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    viewStateLiveData.value = MainViewState.ContentState(it)
+                    viewStateLiveData.value = PokemonListViewState.ContentState(it)
                 }, {
                     Log.d("ViewModel", "Error is", it)
-                    viewStateLiveData.value = MainViewState.ErrorState("Error Message")
+                    viewStateLiveData.value = PokemonListViewState.ErrorState("Error Message")
                 }
             )
     }

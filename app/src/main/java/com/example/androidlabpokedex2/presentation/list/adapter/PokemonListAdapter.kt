@@ -16,7 +16,7 @@ import java.lang.Exception
 private const val ITEM_TYPE_UNKNOWN = 0
 private const val ITEM_TYPE_POKEMON = 1
 private const val ITEM_TYPE_HEADER = 2
-class MainAdapter(
+class PokemonListAdapter(
     private val onItemClicked: (id: String) -> Unit
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: MutableList<DisplayableItem> = emptyList<DisplayableItem>().toMutableList()

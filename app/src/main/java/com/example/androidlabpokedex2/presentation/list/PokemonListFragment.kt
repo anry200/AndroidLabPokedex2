@@ -7,13 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
-import com.example.androidlabpokedex2.presentation.details.PokemonDetailsFragment
+import com.example.androidlabpokedex2.presentation.Navigation
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.list.adapter.PokemonListAdapter
 
 class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
     private val viewModel = PokemonListViewModel()
     private var adapter: PokemonListAdapter? = null
+    private val navigation: Navigation? by lazy { (activity as? Navigation) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,15 +41,7 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
     private fun initRecyclerView() {
         adapter = PokemonListAdapter(
             onItemClicked = { id ->
-                val safeContext = context
-                if (safeContext != null) {
-                    activity?.let {
-                        it.supportFragmentManager.beginTransaction()
-                            .replace(android.R.id.content, PokemonDetailsFragment.newInstance(id))
-                            .addToBackStack(null)
-                            .commit()
-                    }
-                }
+                navigation?.openPokemonDetails(id)
             }
         )
 

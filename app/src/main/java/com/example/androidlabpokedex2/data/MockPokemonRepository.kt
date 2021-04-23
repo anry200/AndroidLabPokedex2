@@ -1,7 +1,7 @@
 package com.example.androidlabpokedex2.data
 
-import com.example.androidlabpokedex2.domain.PokemonRepository
 import com.example.androidlabpokedex2.domain.PokemonEntity
+import com.example.androidlabpokedex2.domain.PokemonRepository
 import io.reactivex.Single
 
 class MockPokemonRepository: PokemonRepository {

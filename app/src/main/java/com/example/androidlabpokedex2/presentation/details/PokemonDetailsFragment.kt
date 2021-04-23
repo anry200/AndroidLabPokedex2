@@ -1,50 +1,48 @@
 package com.example.androidlabpokedex2.presentation.details
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.example.androidlabpokedex2.R
 import com.squareup.picasso.Picasso
 
-class PokemonDetailsActivity: AppCompatActivity() {
+class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
     private val viewModel = PokemonDetailsViewModel()
 
     companion object {
         private const val PARAM_POKEMON_ID = "Pockemon_Id"
 
-        fun intent(context: Context, id: String): Intent {
-            val intent = Intent(context, PokemonDetailsActivity::class.java)
-            return intent.putExtra(PARAM_POKEMON_ID, id)
+        fun newInstance(id: String): Fragment = PokemonDetailsFragment().apply {
+            arguments = bundleOf(
+                PARAM_POKEMON_ID to id
+            )
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pokemon_details)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val id = intent.extras?.getString(PARAM_POKEMON_ID)
+        val id = arguments?.getString(PARAM_POKEMON_ID)
 
         if (id != null) {
-            loadPokemonData(id)
+            loadPokemonData(view, id)
         } else {
             Log.d("TAG, ","Error, pokemon with id=$id not found")
-            finish()
         }
     }
 
-    private fun loadPokemonData(id: String) {
+    private fun loadPokemonData(view: View, id: String) {
         viewModel.loadPokemonById(id)
 
-        val progressView = findViewById<ProgressBar>(R.id.progress)
-        val contentView = findViewById<View>(R.id.content_group)
-        val errorView = findViewById<TextView>(R.id.error_message_text)
+        val progressView = view.findViewById<ProgressBar>(R.id.progress)
+        val contentView = view.findViewById<View>(R.id.content_group)
+        val errorView = view.findViewById<TextView>(R.id.error_message_text)
 
         viewModel.viewState().observe(this) { viewState ->
             when(viewState) {
@@ -58,7 +56,7 @@ class PokemonDetailsActivity: AppCompatActivity() {
                     contentView.isVisible = true
                     errorView.isVisible = false
 
-                    showDataState(state = viewState)
+                    showDataState(view = view, state = viewState)
                 }
                 is PokemonDetailsViewState.Error -> {
                     progressView.isVisible = false
@@ -69,10 +67,10 @@ class PokemonDetailsActivity: AppCompatActivity() {
         }
     }
 
-    private fun showDataState(state: PokemonDetailsViewState.Data) {
-        val nameTextView = findViewById<TextView>(R.id.name)
-        val imagePreview = findViewById<ImageView>(R.id.image)
-        val abilitiesTextView = findViewById<TextView>(R.id.abilities)
+    private fun showDataState(view: View, state: PokemonDetailsViewState.Data) {
+        val nameTextView = view.findViewById<TextView>(R.id.name)
+        val imagePreview = view.findViewById<ImageView>(R.id.image)
+        val abilitiesTextView = view.findViewById<TextView>(R.id.abilities)
 
         nameTextView.text = state.name
 

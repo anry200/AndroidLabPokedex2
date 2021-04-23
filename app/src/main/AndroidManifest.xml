@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.details.PokemonDetailsActivity"/>
+        <activity android:name=".presentation.details.PokemonDetailsFragment"/>
     </application>
 
 </manifest>

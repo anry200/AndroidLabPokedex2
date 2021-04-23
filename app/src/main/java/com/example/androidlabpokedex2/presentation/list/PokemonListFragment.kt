@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
-import com.example.androidlabpokedex2.presentation.details.PokemonDetailsActivity
+import com.example.androidlabpokedex2.presentation.details.PokemonDetailsFragment
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.list.adapter.PokemonListAdapter
 
@@ -42,7 +42,12 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
             onItemClicked = { id ->
                 val safeContext = context
                 if (safeContext != null) {
-                    startActivity(PokemonDetailsActivity.intent(safeContext, id))
+                    activity?.let {
+                        it.supportFragmentManager.beginTransaction()
+                            .replace(android.R.id.content, PokemonDetailsFragment.newInstance(id))
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
             }
         )

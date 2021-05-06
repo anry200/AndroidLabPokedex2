@@ -1,17 +1,18 @@
 package com.example.androidlabpokedex2.presentation.details
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.androidlabpokedex2.di.Injector
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import com.example.androidlabpokedex2.domain.PokemonEntity
+import com.example.androidlabpokedex2.domain.Result
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class PokemonDetailsViewModel: ViewModel() {
+class PokemonDetailsViewModel : ViewModel() {
     private val repository = Injector.providePokemonRepository()
-    private var disposable: Disposable? = null
     private val viewStateLiveData = MutableLiveData<PokemonDetailsViewState>()
 
     fun viewState(): LiveData<PokemonDetailsViewState> = viewStateLiveData
@@ -19,23 +20,26 @@ class PokemonDetailsViewModel: ViewModel() {
     fun loadPokemonById(id: String) {
         viewStateLiveData.value = PokemonDetailsViewState.Loading
 
-        disposable = repository.getPokemonById(id)
-            .delay(2, TimeUnit.SECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ pokemonEntity ->
-                viewStateLiveData.value = PokemonDetailsViewState.Data(
-                    name = pokemonEntity.name,
-                    imageUrl = pokemonEntity.previewUrl,
-                    abilities = pokemonEntity.abilities
-                )
-            }, {
-                viewStateLiveData.value = PokemonDetailsViewState.Error("Failed to load pokemon with id=$id")
-            })
+        fun PokemonEntity.toDataViewState() = PokemonDetailsViewState.Data(
+            name = name,
+            imageUrl = previewUrl,
+            abilities = abilities
+        )
+
+        viewModelScope.launch {
+            delay(2000)
+            viewStateLiveData.value = when (val result = repository.getPokemonById(id)) {
+                is Result.Success -> {
+                    val responseData = result.data
+                    responseData.toDataViewState()
+                }
+                is Result.Error -> {
+                    Log.d("ViewModel", "Error is", result.exception)
+                    createErrorViewState("Failed to load pokemon with id=$id")
+                }
+            }
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
-    }
+    private fun createErrorViewState(message: String) = PokemonDetailsViewState.Error(message)
 }

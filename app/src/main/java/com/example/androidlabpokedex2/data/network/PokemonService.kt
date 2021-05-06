@@ -1,8 +1,6 @@
 package com.example.androidlabpokedex2.data.network
 
-import io.reactivex.Single
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,7 +10,7 @@ fun createPokedexApiService(): PokedexApiService {
     val retrofit = Retrofit.Builder()
         .baseUrl("https://pokeapi.co/api/v2/")
         .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 
     return retrofit.create(PokedexApiService::class.java)
@@ -23,17 +21,16 @@ interface PokedexApiService {
      * See for details: https://pokeapi.co/api/v2/pokemon
      */
     @GET("pokemon")
-    fun fetchPokemonList(
+    suspend fun fetchPokemonList(
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
-    ): Single<PokemonListResponse>
+    ): PokemonListResponse
 
     /**
      * See for details: https://pokeapi.co/api/v2/pokemon/bulbasaur
      */
     @GET("pokemon/{name}")
-    fun fetchPokemonInfo(@Path("name") name: String): Single<PokemonDetailedResponse>
-
+    suspend fun fetchPokemonDetails(@Path("name") name: String): PokemonDetailsResponse
 }
 
 data class PokemonListResponse(
@@ -46,7 +43,7 @@ data class PokemonPartialResponse(
     val url: String
 )
 
-data class PokemonDetailedResponse(
+data class PokemonDetailsResponse(
     val id: String,
     val name: String,
     val abilities: List<PokemonAbilityData>

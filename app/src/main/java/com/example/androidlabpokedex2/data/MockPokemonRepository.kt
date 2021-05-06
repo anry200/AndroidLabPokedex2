@@ -2,7 +2,7 @@ package com.example.androidlabpokedex2.data
 
 import com.example.androidlabpokedex2.domain.PokemonEntity
 import com.example.androidlabpokedex2.domain.PokemonRepository
-import io.reactivex.Single
+import com.example.androidlabpokedex2.domain.Result
 
 class MockPokemonRepository: PokemonRepository {
     val items = mutableListOf<PokemonEntity>(
@@ -13,18 +13,17 @@ class MockPokemonRepository: PokemonRepository {
         PokemonEntity("5", "charmeleon", generateUrlFromId(5)),
     )
 
-    override fun getPokemonList(): Single<List<PokemonEntity>> =
-        Single.just(items)
+    override suspend fun getPokemonList(): Result<List<PokemonEntity>> = Result.Success(items)
 
-    override fun getPokemonById(id: String): Single<PokemonEntity> {
+    override suspend fun getPokemonById(id: String): Result<PokemonEntity> {
         val pokemon = items.find { it.id == id }
 
         return if (pokemon != null) {
-            Single.just(pokemon)
+            Result.Success(pokemon)
         } else {
-            Single.error(Throwable("Not found"))
+            Result.Error(Exception("Not found"))
         }
     }
 
-    fun generateUrlFromId(id: Int): String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
+    private fun generateUrlFromId(id: Int): String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
 }

@@ -23,13 +23,13 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
 
         viewModel.viewState().observe(this) { state ->
             when(state) {
-                is PokemonListViewState.LoadingState -> {
+                is PokemonListViewState.Loading -> {
                     showProgress()
                 }
-                is PokemonListViewState.ErrorState -> {
-                    showError(state.errorMessage)
+                is PokemonListViewState.Error -> {
+                    showError(state.message)
                 }
-                is PokemonListViewState.ContentState -> {
+                is PokemonListViewState.Data -> {
                     showData(state.items)
                 }
             }

@@ -19,9 +19,12 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecyclerView()
+        initViewModel()
+        viewModel.loadData()
+    }
 
+    private fun initViewModel() {
         viewModel.viewState().observe(viewLifecycleOwner) { state ->
             when(state) {
                 is PokemonListViewState.Loading -> {
@@ -35,8 +38,6 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
                 }
             }
         }
-
-        viewModel.loadData()
     }
 
     private fun initRecyclerView() {

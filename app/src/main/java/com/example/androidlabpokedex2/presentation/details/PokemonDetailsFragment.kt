@@ -12,10 +12,9 @@ import androidx.fragment.app.Fragment
 import com.example.androidlabpokedex2.R
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
-    private val viewModel: PokemonDetailsViewModel by viewModel()
-
     companion object {
         private const val PARAM_POKEMON_ID = "Pockemon_Id"
 
@@ -26,21 +25,19 @@ class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val id = arguments?.getString(PARAM_POKEMON_ID)
-
-        if (id != null) {
-            loadPokemonData(view, id)
-        } else {
-            Log.d("TAG, ","Error, pokemon with id=$id not found")
-        }
+    private val id: String by lazy {
+        arguments?.getString(PARAM_POKEMON_ID) ?: ""
     }
 
-    private fun loadPokemonData(view: View, id: String) {
-        viewModel.loadPokemonById(id)
+    private val viewModel: PokemonDetailsViewModel by viewModel { parametersOf(id) }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView(view)
+        viewModel.loadPokemon()
+    }
+
+    private fun initView(view: View) {
         val progressView = view.findViewById<ProgressBar>(R.id.progress)
         val contentView = view.findViewById<View>(R.id.content_group)
         val errorView = view.findViewById<TextView>(R.id.error_message_text)

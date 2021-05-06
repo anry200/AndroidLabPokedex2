@@ -11,9 +11,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.androidlabpokedex2.R
 import com.squareup.picasso.Picasso
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
-    private val viewModel = PokemonDetailsViewModel()
+    private val viewModel: PokemonDetailsViewModel by viewModel()
 
     companion object {
         private const val PARAM_POKEMON_ID = "Pockemon_Id"
@@ -44,7 +45,7 @@ class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
         val contentView = view.findViewById<View>(R.id.content_group)
         val errorView = view.findViewById<TextView>(R.id.error_message_text)
 
-        viewModel.viewState().observe(this) { viewState ->
+        viewModel.viewState().observe(viewLifecycleOwner) { viewState ->
             when(viewState) {
                 PokemonDetailsViewState.Loading -> {
                     progressView.isVisible = true

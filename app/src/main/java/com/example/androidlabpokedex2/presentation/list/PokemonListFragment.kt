@@ -10,9 +10,10 @@ import com.example.androidlabpokedex2.R
 import com.example.androidlabpokedex2.presentation.Navigation
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.list.adapter.PokemonListAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
-    private val viewModel = PokemonListViewModel()
+    private val viewModel: PokemonListViewModel by viewModel()
     private var adapter: PokemonListAdapter? = null
     private val navigation: Navigation? by lazy { (activity as? Navigation) }
 
@@ -21,7 +22,7 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
 
         initRecyclerView()
 
-        viewModel.viewState().observe(this) { state ->
+        viewModel.viewState().observe(viewLifecycleOwner) { state ->
             when(state) {
                 is PokemonListViewState.Loading -> {
                     showProgress()

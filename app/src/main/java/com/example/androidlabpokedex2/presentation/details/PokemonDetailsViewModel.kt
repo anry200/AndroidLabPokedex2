@@ -5,14 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.androidlabpokedex2.di.Injector
 import com.example.androidlabpokedex2.domain.PokemonEntity
+import com.example.androidlabpokedex2.domain.PokemonRepository
 import com.example.androidlabpokedex2.domain.Result
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PokemonDetailsViewModel : ViewModel() {
-    private val repository = Injector.providePokemonRepository()
+class PokemonDetailsViewModel(
+    private val repository: PokemonRepository
+) : ViewModel() {
     private val viewStateLiveData = MutableLiveData<PokemonDetailsViewState>()
 
     fun viewState(): LiveData<PokemonDetailsViewState> = viewStateLiveData

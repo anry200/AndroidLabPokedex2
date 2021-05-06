@@ -54,13 +54,24 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
-    // RxJava2
-//    implementation "io.reactivex.rxjava2:rxjava:2.2.21"
-//    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-//    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+
+    // Koin for Android
+    def koin_version= "3.0.1"
+    // Koin main features for Android (Scope,ViewModel ...)
+    implementation "io.insert-koin:koin-android:$koin_version"
+    // Koin Android - experimental builder extensions
+    implementation "io.insert-koin:koin-android-ext:$koin_version"
+    // Koin for Jetpack WorkManager
+//    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    // Koin for Jetpack Compose (unstable version)
+//    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    // Koin for Testing
+    testImplementation "io.insert-koin:koin-test:$koin_version"
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.30")
+
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

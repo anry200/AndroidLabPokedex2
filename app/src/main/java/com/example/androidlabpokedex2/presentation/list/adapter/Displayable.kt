@@ -15,5 +15,4 @@ data class HeaderItem(
     val text: String
 ): DisplayableItem
 
-fun PokemonEntity.toItem(): PokemonItem =
-    PokemonItem(id, name, previewUrl)
+fun PokemonEntity.toItem() = PokemonItem(id, name, previewUrl)

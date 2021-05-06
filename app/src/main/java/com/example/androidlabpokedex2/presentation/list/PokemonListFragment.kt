@@ -3,13 +3,11 @@ package com.example.androidlabpokedex2.presentation.list
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
-import com.example.androidlabpokedex2.presentation.details.PARAM_POKEMON_ID
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.list.adapter.PokemonListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,10 +42,8 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
     private fun initRecyclerView() {
         adapter = PokemonListAdapter(
             onItemClicked = { id ->
-                val bundle = bundleOf(
-                    PARAM_POKEMON_ID to id
-                )
-                findNavController().navigate(R.id.action_pokemonList_to_pokemonDetails, bundle)
+                val action = PokemonListFragmentDirections.actionPokemonListToPokemonDetails(id)
+                findNavController().navigate(action)
             }
         )
 

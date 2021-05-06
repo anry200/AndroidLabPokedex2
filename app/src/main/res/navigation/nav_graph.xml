@@ -19,5 +19,9 @@
         android:id="@+id/pokemon_details_screen"
         android:name="com.example.androidlabpokedex2.presentation.details.PokemonDetailsFragment"
         android:label="Pokemon Details"
-        tools:layout="@layout/fragment_pokemon_details" />
+        tools:layout="@layout/fragment_pokemon_details" >
+        <argument
+            android:name="pokemonId"
+            app:argType="string"/>
+    </fragment>
 </navigation>

@@ -1,7 +1,20 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        def nav_version = "2.3.5"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+    }
+}
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
+
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdk 30

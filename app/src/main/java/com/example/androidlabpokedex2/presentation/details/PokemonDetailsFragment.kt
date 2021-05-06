@@ -1,29 +1,26 @@
 package com.example.androidlabpokedex2.presentation.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.example.androidlabpokedex2.R
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-const val PARAM_POKEMON_ID = "Pockemon_Id"
 class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
-    private val id: String by lazy {
-        arguments?.getString(PARAM_POKEMON_ID) ?: ""
-    }
+    private val args by navArgs<PokemonDetailsFragmentArgs>()
 
-    private val viewModel: PokemonDetailsViewModel by viewModel { parametersOf(id) }
+    private val viewModel: PokemonDetailsViewModel by viewModel { parametersOf(args.pokemonId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initView(view)
         viewModel.loadPokemon()
     }

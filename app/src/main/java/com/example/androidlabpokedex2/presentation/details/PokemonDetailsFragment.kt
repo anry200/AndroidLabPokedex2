@@ -14,17 +14,8 @@ import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
+const val PARAM_POKEMON_ID = "Pockemon_Id"
 class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
-    companion object {
-        private const val PARAM_POKEMON_ID = "Pockemon_Id"
-
-        fun newInstance(id: String): Fragment = PokemonDetailsFragment().apply {
-            arguments = bundleOf(
-                PARAM_POKEMON_ID to id
-            )
-        }
-    }
-
     private val id: String by lazy {
         arguments?.getString(PARAM_POKEMON_ID) ?: ""
     }

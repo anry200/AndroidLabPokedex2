@@ -11,60 +11,48 @@ import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
+class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
     private val args by navArgs<PokemonDetailsFragmentArgs>()
-
     private val viewModel: PokemonDetailsViewModel by viewModel { parametersOf(args.pokemonId) }
+    private var binding: FragmentPokemonDetailsBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initView(view)
+        binding = FragmentPokemonDetailsBinding.bind(view)
+        viewModel.viewState().observe(viewLifecycleOwner) { state -> showViewState(state) }
         viewModel.loadPokemon()
     }
 
-    private fun initView(view: View) {
-        val binding = FragmentPokemonDetailsBinding.bind(view)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
 
-        val progressView = binding.progress
-        val contentView = binding.contentGroup
-        val errorView = binding.errorMessageText
+    private fun showViewState(viewState: PokemonDetailsViewState) = binding?.apply {
+        when (viewState) {
+            PokemonDetailsViewState.Loading -> {
+                progressView.isVisible = true
+                contentGroup.isVisible = false
+                errorMessage.isVisible = false
+            }
+            is PokemonDetailsViewState.Data -> {
+                progressView.isVisible = false
+                contentGroup.isVisible = true
+                errorMessage.isVisible = false
 
-        viewModel.viewState().observe(viewLifecycleOwner) { viewState ->
-            when(viewState) {
-                PokemonDetailsViewState.Loading -> {
-                    progressView.isVisible = true
-                    contentView.isVisible = false
-                    errorView.isVisible = false
-                }
-                is PokemonDetailsViewState.Data -> {
-                    progressView.isVisible = false
-                    contentView.isVisible = true
-                    errorView.isVisible = false
-
-                    showDataState(binding, viewState)
-                }
-                is PokemonDetailsViewState.Error -> {
-                    progressView.isVisible = false
-                    contentView.isVisible = false
-                    errorView.isVisible = true
-                }
+                showDataState(viewState)
+            }
+            is PokemonDetailsViewState.Error -> {
+                progressView.isVisible = false
+                contentGroup.isVisible = false
+                errorMessage.isVisible = true
             }
         }
     }
 
-    private fun showDataState(
-        binding: FragmentPokemonDetailsBinding,
-        state: PokemonDetailsViewState.Data
-    ) {
-        val nameTextView = binding.name //view.findViewById<TextView>(R.id.name)
-        val imagePreview = binding.image //view.findViewById<ImageView>(R.id.image)
-        val abilitiesTextView = binding.abilities //view.findViewById<TextView>(R.id.abilities)
-
-        nameTextView.text = state.name
-
-        Picasso.get().load(state.imageUrl).into(imagePreview)
-
-        abilitiesTextView.text = state.abilities.joinToString(separator = ",") { it }
+    private fun showDataState(state: PokemonDetailsViewState.Data) = binding?.apply {
+        name.text = state.name
+        abilities.text = state.abilities.joinToString(separator = ",") { it }
+        Picasso.get().load(state.imageUrl).into(image)
     }
 }

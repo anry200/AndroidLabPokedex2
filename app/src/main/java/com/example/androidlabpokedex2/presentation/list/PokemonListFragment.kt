@@ -59,7 +59,7 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
     }
 
     private fun showContent(items: List<DisplayableItem>) {
-        adapter?.setPokemonList(items)
+        adapter?.submitList(items)
     }
 
     private fun showError(errorMessage: String) {

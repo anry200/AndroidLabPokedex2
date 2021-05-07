@@ -68,28 +68,20 @@ class PokemonListAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class PokemonViewHolder(view: View, val onItemClicked: (id: String) -> Unit): RecyclerView.ViewHolder(view) {
-        private val textView = itemView.findViewById<TextView>(R.id.name)
-        private val imagePreview = itemView.findViewById<ImageView>(R.id.imagePreview)
+    class PokemonViewHolder(view: View, val onItemClicked: (id: String) -> Unit) :
+        RecyclerView.ViewHolder(view) {
+        private val binding = MainItemBinding.bind(itemView)
 
-        fun bind(item: PokemonItem) {
-            textView.text = item.name
+        fun bind(item: PokemonItem) = with(binding) {
+            name.text = item.name
 
             if (item.useRedColor) {
-                textView.setTextColor(Color.RED)
+                name.setTextColor(Color.RED)
             } else {
-                textView.setTextColor(Color.BLACK)
+                name.setTextColor(Color.BLACK)
             }
 
-            Picasso.get().load(item.image).into(imagePreview, object: Callback {
-                override fun onSuccess() {
-                    Log.d("","Loaded image")
-                }
-
-                override fun onError(e: Exception?) {
-                    Log.d("", "Loaded image", e)
-                }
-            })
+            Picasso.get().load(item.image).into(imagePreview)
 
             itemView.setOnClickListener {
                 onItemClicked(item.id)
@@ -97,11 +89,11 @@ class PokemonListAdapter(
         }
     }
 
-    class HeaderViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val bannerName = itemView.findViewById<TextView>(R.id.headerText)
+    class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = HeaderItemBinding.bind(itemView)
 
-        fun bind(item: HeaderItem) {
-            bannerName.text = item.text
+        fun bind(item: HeaderItem) = with(binding) {
+            headerText.text = item.text
         }
     }
 }

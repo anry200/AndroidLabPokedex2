@@ -6,8 +6,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
+import com.example.androidlabpokedex2.databinding.FragmentPokemonListBinding
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
 import com.example.androidlabpokedex2.presentation.list.adapter.PokemonListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,7 +18,8 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
+        val binding = FragmentPokemonListBinding.bind(view)
+        initRecyclerView(binding)
         initViewModel()
         viewModel.loadData()
     }
@@ -39,7 +40,7 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
         }
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(binding: FragmentPokemonListBinding) {
         adapter = PokemonListAdapter(
             onItemClicked = { id ->
                 val action = PokemonListFragmentDirections.actionPokemonListToPokemonDetails(id)
@@ -47,9 +48,10 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list) {
             }
         )
 
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView?.layoutManager = LinearLayoutManager(context)
-        recyclerView?.adapter = adapter
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@PokemonListFragment.adapter
+        }
     }
 
     private fun showProgress() {

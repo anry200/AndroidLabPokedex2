@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.androidlabpokedex2.domain.PokemonEntity
 import com.example.androidlabpokedex2.domain.PokemonRepository
 import com.example.androidlabpokedex2.domain.Result
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PokemonDetailsViewModel(
@@ -22,26 +21,28 @@ class PokemonDetailsViewModel(
     fun loadPokemon() {
         viewStateLiveData.value = PokemonDetailsViewState.Loading
 
-        fun PokemonEntity.toDataViewState() = PokemonDetailsViewState.Data(
-            name = name,
-            imageUrl = previewUrl,
-            abilities = abilities
-        )
-
         viewModelScope.launch {
-            delay(2000)
             viewStateLiveData.value = when (val result = repository.getPokemonById(id)) {
                 is Result.Success -> {
-                    val responseData = result.data
-                    responseData.toDataViewState()
+                    val pokemonEntity = result.data
+                    createContentViewState(pokemonEntity)
                 }
                 is Result.Error -> {
-                    Log.d("ViewModel", "Error is", result.exception)
+                    Log.d("ViewModel", "Error: ", result.exception)
                     createErrorViewState("Failed to load pokemon with id=$id")
                 }
             }
         }
     }
+
+    private fun PokemonEntity.toContentViewState() = PokemonDetailsViewState.Content(
+        name = name,
+        imageUrl = previewUrl,
+        abilities = abilities
+    )
+
+    private fun createContentViewState(pokemonEntity: PokemonEntity) =
+        pokemonEntity.toContentViewState()
 
     private fun createErrorViewState(message: String) = PokemonDetailsViewState.Error(message)
 }

@@ -9,15 +9,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidlabpokedex2.R
+import com.example.androidlabpokedex2.databinding.HeaderItemBinding
+import com.example.androidlabpokedex2.databinding.MainItemBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 private const val ITEM_TYPE_UNKNOWN = 0
 private const val ITEM_TYPE_POKEMON = 1
 private const val ITEM_TYPE_HEADER = 2
+
 class PokemonListAdapter(
     private val onItemClicked: (id: String) -> Unit
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: MutableList<DisplayableItem> = emptyList<DisplayableItem>().toMutableList()
 
     fun setPokemonList(pokemons: List<DisplayableItem>) {
@@ -27,7 +30,7 @@ class PokemonListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
+        return when (viewType) {
             ITEM_TYPE_POKEMON -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.main_item, parent, false)
@@ -46,20 +49,18 @@ class PokemonListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val itemToShow = items[position]
-
-        when (itemToShow) {
+        when (val item = items[position]) {
             is PokemonItem -> {
-                (holder as PokemonViewHolder).bind(itemToShow)
+                (holder as PokemonViewHolder).bind(item)
             }
             is HeaderItem -> {
-                (holder as HeaderViewHolder).bind(itemToShow)
+                (holder as HeaderViewHolder).bind(item)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(items[position]) {
+        return when (items[position]) {
             is PokemonItem -> ITEM_TYPE_POKEMON
             is HeaderItem -> ITEM_TYPE_HEADER
             else -> ITEM_TYPE_UNKNOWN

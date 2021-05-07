@@ -19,7 +19,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentPokemonDetailsBinding.bind(view)
-        viewModel.viewState().observe(viewLifecycleOwner) { state -> showViewState(state) }
+        viewModel.viewState().observe(viewLifecycleOwner, ::showViewState)
         viewModel.loadPokemon()
     }
 
@@ -35,12 +35,12 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
                 contentGroup.isVisible = false
                 errorMessage.isVisible = false
             }
-            is PokemonDetailsViewState.Data -> {
+            is PokemonDetailsViewState.Content -> {
                 progressView.isVisible = false
                 contentGroup.isVisible = true
                 errorMessage.isVisible = false
 
-                showDataState(viewState)
+                showContent(viewState)
             }
             is PokemonDetailsViewState.Error -> {
                 progressView.isVisible = false
@@ -50,7 +50,7 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
         }
     }
 
-    private fun showDataState(state: PokemonDetailsViewState.Data) = binding?.apply {
+    private fun showContent(state: PokemonDetailsViewState.Content) = binding?.apply {
         name.text = state.name
         abilities.text = state.abilities.joinToString(separator = ",") { it }
         Picasso.get().load(state.imageUrl).into(image)

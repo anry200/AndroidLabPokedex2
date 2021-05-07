@@ -9,10 +9,10 @@ data class PokemonItem(
     val name: String,
     val image: String,
     val useRedColor: Boolean = false,
-): DisplayableItem
+) : DisplayableItem
 
 data class HeaderItem(
     val text: String
-): DisplayableItem
+) : DisplayableItem
 
 fun PokemonEntity.toItem() = PokemonItem(id, name, previewUrl)

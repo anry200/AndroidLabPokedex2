@@ -1,13 +1,13 @@
 package com.example.androidlabpokedex2.presentation.details
 
 sealed class PokemonDetailsViewState {
-    object Loading: PokemonDetailsViewState()
+    object Loading : PokemonDetailsViewState()
 
-    data class Data(
+    data class Content(
         val name: String,
         val imageUrl: String,
         val abilities: List<String>
-    ): PokemonDetailsViewState()
+    ) : PokemonDetailsViewState()
 
-    data class Error(val message: String): PokemonDetailsViewState()
+    data class Error(val message: String) : PokemonDetailsViewState()
 }

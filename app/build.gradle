@@ -65,6 +65,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
+    // ViewBinding-ktx
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.4.6'
+
     // Navigation
     def nav_version = "2.3.5"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

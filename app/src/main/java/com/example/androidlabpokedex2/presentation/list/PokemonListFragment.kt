@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.androidlabpokedex2.R
 import com.example.androidlabpokedex2.databinding.FragmentPokemonListBinding
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
@@ -14,20 +15,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
     private val viewModel: PokemonListViewModel by viewModel()
+    private val viewBinding: FragmentPokemonListBinding by viewBinding()
     private var adapter: PokemonListAdapter? = null
-    private var binding: FragmentPokemonListBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentPokemonListBinding.bind(view)
         initRecyclerView()
         initViewModel()
         viewModel.fetch()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
     }
 
     private fun initRecyclerView() {
@@ -35,7 +30,7 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
             onItemClicked = ::openPokemonById
         )
 
-        binding?.recyclerView?.apply {
+        viewBinding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@PokemonListFragment.adapter
         }

@@ -18,7 +18,7 @@ class PokemonDetailsViewModel(
 
     fun viewState(): LiveData<PokemonDetailsViewState> = viewStateLiveData
 
-    fun loadPokemon() {
+    fun fetch() {
         viewStateLiveData.value = PokemonDetailsViewState.Loading
 
         viewModelScope.launch {
@@ -35,14 +35,12 @@ class PokemonDetailsViewModel(
         }
     }
 
-    private fun PokemonEntity.toContentViewState() = PokemonDetailsViewState.Content(
-        name = name,
-        imageUrl = previewUrl,
-        abilities = abilities
-    )
-
     private fun createContentViewState(pokemonEntity: PokemonEntity) =
-        pokemonEntity.toContentViewState()
+        PokemonDetailsViewState.Content(
+            name = pokemonEntity.name,
+            imageUrl = pokemonEntity.previewUrl,
+            abilities = pokemonEntity.abilities
+        )
 
     private fun createErrorViewState(message: String) = PokemonDetailsViewState.Error(message)
 }

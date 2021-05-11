@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AndroidLabPokedex2</string>
+
+    <string name="general_message_connectivity_error">Can\'t load</string>
+    <string name="general_message_retry">Retry</string>
+    <string name="general_message_connectivity_error_image_description">Load error image</string>
+    <string name="general_message_loading_text">Loading</string>
+
 </resources>

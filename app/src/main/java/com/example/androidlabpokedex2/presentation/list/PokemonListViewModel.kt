@@ -29,7 +29,7 @@ class PokemonListViewModel(
                 }
                 is Result.Error -> {
                     Log.d("ViewModel", "Error: ", result.exception)
-                    PokemonListViewState.Error("Error Message")
+                    PokemonListViewState.Error("Network Error")
                 }
             }
         }

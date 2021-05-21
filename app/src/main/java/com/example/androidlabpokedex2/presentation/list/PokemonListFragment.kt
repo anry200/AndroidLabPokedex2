@@ -1,15 +1,20 @@
 package com.example.androidlabpokedex2.presentation.list
 
+import android.graphics.Canvas
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.androidlabpokedex2.R
 import com.example.androidlabpokedex2.databinding.FragmentPokemonListBinding
 import com.example.androidlabpokedex2.presentation.list.adapter.DisplayableItem
+import com.example.androidlabpokedex2.presentation.list.adapter.MarginItemDecoration
 import com.example.androidlabpokedex2.presentation.list.adapter.PokemonListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -33,7 +38,9 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
     private fun initRecyclerView() {
         viewBinding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 2)
+            
+            addItemDecoration(MarginItemDecoration(16, 2))
             adapter = this@PokemonListFragment.adapter
         }
     }

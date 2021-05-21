@@ -13,4 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="CardTextStyle1" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/main_text_color</item>
+    </style>
+
+    <style name="ItemText">
+        <item name="android:textAppearance">@style/CardTextStyle1</item>
+        <item name="android:background">@color/card_bg</item>
+    </style>
 </resources>

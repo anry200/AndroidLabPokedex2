@@ -1,4 +1,4 @@
-name: Android Feature Branch CI
+name: Build Debug APK
 
 on:
   push:
@@ -6,6 +6,8 @@ on:
       - '*'
       - '!master'
       - '!release*'
+  pull_request:
+    branches: [ * ]
 
 jobs:
   test:

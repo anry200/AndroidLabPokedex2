@@ -10,7 +10,7 @@ on:
     branches: [ * ]
 
 jobs:
-  test:
+  build_debug_apk:
     name: Build Debug apk
     runs-on: ubuntu-20.04
 
@@ -21,13 +21,13 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
-      - name: Run tests and build release artifacts
+      - name: Run tests and build Debug artifacts
         run: |
             ./gradlew test
             ./gradlew assembleDebug --stacktrace
 
-      - name: Upload signed APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v2
         with:
             name: app-debug.apk
-            path: app/build/outputs/apk/debug/app-debug.apk
+            path: app/build/outputs/apk/debug/*

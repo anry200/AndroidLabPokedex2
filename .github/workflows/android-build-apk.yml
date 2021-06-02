@@ -7,7 +7,6 @@ on:
       - '!master'
       - '!release*'
   pull_request:
-    branches: [*]
 
 jobs:
   build_debug_apk:

@@ -27,6 +27,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        archivesBaseName = "Pokedex2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -45,6 +46,13 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def formattedDate = new Date().format('yyMMdd')
+            outputFileName = "${outputFileName.replace(".apk","")}-v${defaultConfig.versionCode}-${formattedDate}.apk"
+        }
     }
 }
 

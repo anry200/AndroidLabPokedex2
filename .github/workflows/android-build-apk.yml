@@ -28,34 +28,9 @@ jobs:
       - name: Build Debug Apk
         run: ./gradlew assembleDebug assembleRelease --stacktrace
 
-      - name: Store Debug artifact name to environment
-        id: artifact-store-name-debug
-        run: |
-          ARTIFACT_PATHNAME_APK=$(ls app/build/outputs/apk/debug/*.apk | head -n 1)
-          ARTIFACT_NAME_APK=$(basename $ARTIFACT_PATHNAME_APK)
-          echo "ARTIFACT_NAME_APK is " ${ARTIFACT_NAME_APK}
-          echo "ARTIFACT_PATHNAME_APK=${ARTIFACT_PATHNAME_APK}" >> $GITHUB_ENV
-          echo "ARTIFACT_NAME_APK=${ARTIFACT_NAME_APK}" >> $GITHUB_ENV
-
       - name: Upload Debug APK Artifact
         id: artifact-upload-debug
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.ARTIFACT_NAME_APK }}
-          path: ${{ env.ARTIFACT_PATHNAME_APK }}
-
-      - name: Store Release artifact name to environment
-        id: artifact-store-name-release
-        run: |
-          ARTIFACT_PATHNAME_APK=$(ls app/build/outputs/apk/release/*.apk | head -n 1)
-          ARTIFACT_NAME_APK=$(basename $ARTIFACT_PATHNAME_APK)
-          echo "ARTIFACT_NAME_APK is " ${ARTIFACT_NAME_APK}
-          echo "ARTIFACT_PATHNAME_APK=${ARTIFACT_PATHNAME_APK}" >> $GITHUB_ENV
-          echo "ARTIFACT_NAME_APK=${ARTIFACT_NAME_APK}" >> $GITHUB_ENV
-
-      - name: Upload Release APK Artifact
-        id: artifact-upload-release
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ env.ARTIFACT_NAME_APK }}
-          path: ${{ env.ARTIFACT_PATHNAME_APK }}
+          name: Apks
+          path: app/build/outputs/apk/**/*.apk
